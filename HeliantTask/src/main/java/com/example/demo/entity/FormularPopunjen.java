@@ -1,12 +1,12 @@
 package com.example.demo.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.sql.Timestamp;
-import java.util.List;
 
 /**
  * @author Marko Kostic, on 2/26/2024
@@ -21,8 +21,9 @@ public class FormularPopunjen {
     @Column(name = "id")
     private Integer id;
 
-    @ManyToOne
+    @OneToOne
     @JoinColumn(name = "id_formular", nullable = false)
+    @JsonIgnore // To get pure JSON response,without recursively repeating the data
     private Formular formular;
 
     @Column(name = "vreme_kreiranja")
@@ -32,8 +33,5 @@ public class FormularPopunjen {
     @Column(name = "vreme_poslednje_izmene")
     @UpdateTimestamp
     private Timestamp vremePoslednjeIzmene;
-
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idFormularPopunjen")
-    private List<PoljePopunjeno> poljaPopunjena;
 
 }

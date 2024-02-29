@@ -38,9 +38,10 @@ public class Formular {
     @UpdateTimestamp
     private Timestamp vremePoslednjeIzmene;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "formular")
-    private List<FormularPopunjen> popunjeniFormulari;
+    @OneToMany(mappedBy = "formular", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Polje> poljeDtoList;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idFormular")
-    private List<Polje> polja;
+    @OneToOne(mappedBy = "formular", cascade = CascadeType.ALL, orphanRemoval = true)
+    private PoljePopunjeno poljePopunjeno;
+
 }

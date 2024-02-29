@@ -1,5 +1,6 @@
 package com.example.demo.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -25,11 +26,13 @@ public class PoljePopunjeno {
 
     @ManyToOne
     @JoinColumn(name = "id_formular_popunjen", nullable = false)
-    private FormularPopunjen idFormularPopunjen;
+    @JsonIgnore // To get pure JSON response,without recursively repeating the data
+    private FormularPopunjen formularPopunjen;
 
-    @ManyToOne
+    @OneToOne
     @JoinColumn(name = "id_polje", nullable = false)
-    private Polje idPolje;
+    @JsonIgnore // To get pure JSON response,without recursively repeating the data
+    private Polje polje;
 
     @Column(name = "vrednost_tekst")
     @NotBlank(message = "Vrednost tekst je obavezno polje!")

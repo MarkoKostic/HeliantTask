@@ -7,12 +7,14 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * @author Marko Kostic, on 2/26/2024
  */
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class KorisnikServiceImpl implements KorisnikService {
 
     private final KorisnikRepository korisnikRepository;

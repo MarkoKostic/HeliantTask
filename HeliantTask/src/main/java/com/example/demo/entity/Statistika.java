@@ -26,4 +26,9 @@ public class Statistika {
     @Column(name = "broj_popunjenih_formulara")
     @NotNull
     private Integer brojPopunjenihFormulara;
+
+    public Statistika(Date datum, Integer brojPopunjenihFormulara) {
+        this.datum = datum;
+        this.brojPopunjenihFormulara = brojPopunjenihFormulara;
+    }
 }

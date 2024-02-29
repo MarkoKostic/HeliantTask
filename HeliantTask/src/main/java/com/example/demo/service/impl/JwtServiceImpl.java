@@ -28,7 +28,7 @@ public class JwtServiceImpl implements JwtService {
     @SuppressWarnings("all")
     public String generateToken(UserDetails userDetails) {
         return Jwts.builder().setSubject(userDetails.getUsername()).setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 24)) // more than one day
+                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 24 * 7)) // more than 7 days
                 .signWith(getSignKey(), SignatureAlgorithm.HS256).compact();
     }
 

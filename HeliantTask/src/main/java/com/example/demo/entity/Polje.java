@@ -1,5 +1,6 @@
 package com.example.demo.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -9,7 +10,6 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.sql.Timestamp;
-import java.util.List;
 
 /**
  * @author Marko Kostic, on 2/26/2024
@@ -26,7 +26,8 @@ public class Polje {
 
     @ManyToOne
     @JoinColumn(name = "id_formular", nullable = false)
-    private Formular idFormular;
+    @JsonIgnore // To get pure JSON response,without recursively repeating the data
+    private Formular formular;
 
     @Column(name = "naziv")
     @NotBlank(message = "Naziv je obavezno polje!")
@@ -38,10 +39,7 @@ public class Polje {
     private int prikazniRedosled;
 
     @Enumerated(EnumType.STRING)
-    private PoljeEnum poljeEnum;
-
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idPolje")
-    private List<PoljePopunjeno> listaPopunjenihPolja;
+    private PoljeEnum tip;
 
     @Column(name = "vreme_kreiranja")
     @CreationTimestamp // this is special hibernate annotation used for managing timestamps
@@ -50,9 +48,5 @@ public class Polje {
     @Column(name = "vreme_poslednje_izmene")
     @UpdateTimestamp
     private Timestamp vremePoslednjeIzmene;
-
-    public enum PoljeEnum {
-        TEKST, BROJ;
-    }
 
 }
