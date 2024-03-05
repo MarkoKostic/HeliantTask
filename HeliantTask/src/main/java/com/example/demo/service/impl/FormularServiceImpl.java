@@ -1,5 +1,6 @@
 package com.example.demo.service.impl;
 
+import com.example.demo.converter.FormularConverter;
 import com.example.demo.dto.FormularDto;
 import com.example.demo.entity.Formular;
 import com.example.demo.entity.FormularPopunjen;
@@ -51,20 +52,33 @@ public class FormularServiceImpl implements FormularService {
     }
 
     @Override
-    public void saveFormular(FormularDto formularDto) {
+    public FormularDto saveFormular(FormularDto formularDto) {
+        Formular formularEntity = FormularConverter.convertToEntity(formularDto);
+        formularEntity = formularRepository.save(formularEntity);
 
-        // Mapiranje FormularDto na Formular
-        Formular formular = mapirajFormularDtoNaFormular(formularDto);
+        // save then FormularPopunjen
+        FormularPopunjen formularPopunjenEntity = new FormularPopunjen();
+        formularPopunjenEntity.setFormular(formularEntity);
+        FormularPopunjen savedFormularPopunjen = formularPopunjenRepository.save(formularPopunjenEntity);
 
-        // Čuvanje Formulara u bazi podataka
-        formularRepository.save(formular);
+        // save Polje
+        if (formularDto.getPoljeDtoList() != null) {
+            for (FormularDto.PoljeDto poljeDto : formularDto.getPoljeDtoList()) {
+                Polje poljeEntity = new Polje();
+                poljeEntity.setFormular(formularEntity);
+                poljeEntity.setNaziv(poljeDto.getNaziv());
+                poljeEntity.setPrikazniRedosled(poljeDto.getPrikazniRedosled());
+                poljeEntity.setTip(poljeDto.getTip());
+                Polje savedPolje = poljeRepository.save(poljeEntity);
 
-        // Mapiranje i čuvanje FormularPopunjen
-        FormularPopunjen formularPopunjen = mapirajFormularNaFormularPopunjen(formular);
-        formularPopunjenRepository.save(formularPopunjen);
+                PoljePopunjeno poljePopunjenoEntity = FormularConverter.convertToPoljePopunjenoEntity(poljeDto);
+                poljePopunjenoEntity.setFormularPopunjen(savedFormularPopunjen);
+                poljePopunjenoEntity.setPolje(savedPolje);
+                poljePopunjenoRepository.save(poljePopunjenoEntity);
+            }
+        }
 
-        // Mapiranje i čuvanje Polja i PoljaPopunjeno
-        mapirajIPersistujPolja(formularDto.getPoljeDtoList(), formular, formularPopunjen);
+        return formularDto;
     }
 
     private Formular mapirajFormularDtoNaFormular(FormularDto formularDto) {
@@ -77,19 +91,21 @@ public class FormularServiceImpl implements FormularService {
         return formularPopunjen;
     }
 
-    private void mapirajIPersistujPolja(List<FormularDto.PoljeDto> poljeDtoList, Formular formular, FormularPopunjen formularPopunjen) {
-        for (FormularDto.PoljeDto poljeDto : poljeDtoList) {
-            // Mapiranje Polje
-            Polje polje = mapirajPoljeDtoNaPolje(poljeDto, formular);
-            poljeRepository.save(polje);
-
-            // Mapiranje PoljePopunjeno
-            FormularDto.PoljePopunjenoDto poljePopunjenoDto = new FormularDto.PoljePopunjenoDto();
-            // Postavite vrednosti za poljePopunjenoDto ako su dostupne
-            PoljePopunjeno poljePopunjeno = mapirajPoljePopunjenoDtoNaPoljePopunjeno(poljePopunjenoDto, polje, formularPopunjen);
-            poljePopunjenoRepository.save(poljePopunjeno);
-        }
-    }
+    /**
+     * private void mapirajIPersistujPolja(List<FormularDto.PoljeDto> poljeDtoList, Formular formular, FormularPopunjen formularPopunjen) {
+     * for (FormularDto.PoljeDto poljeDto : poljeDtoList) {
+     * // Mapiranje Polje
+     * Polje polje = mapirajPoljeDtoNaPolje(poljeDto, formular);
+     * poljeRepository.save(polje);
+     * <p>
+     * // Mapiranje PoljePopunjeno
+     * FormularDto.PoljePopunjenoDto poljePopunjenoDto = new FormularDto.PoljePopunjenoDto();
+     * // Postavite vrednosti za poljePopunjenoDto ako su dostupne
+     * PoljePopunjeno poljePopunjeno = mapirajPoljePopunjenoDtoNaPoljePopunjeno(poljePopunjenoDto, polje, formularPopunjen);
+     * poljePopunjenoRepository.save(poljePopunjeno);
+     * }
+     * }
+     */
 
     private Polje mapirajPoljeDtoNaPolje(FormularDto.PoljeDto poljeDto, Formular formular) {
         Polje polje = objectMapper.convertValue(poljeDto, Polje.class);
@@ -100,14 +116,16 @@ public class FormularServiceImpl implements FormularService {
         return polje;
     }
 
-    private PoljePopunjeno mapirajPoljePopunjenoDtoNaPoljePopunjeno(FormularDto.PoljePopunjenoDto poljePopunjenoDto, Polje polje, FormularPopunjen formularPopunjen) {
-        PoljePopunjeno poljePopunjeno = objectMapper.convertValue(poljePopunjenoDto, PoljePopunjeno.class);
-        poljePopunjeno.setPolje(polje);
-        poljePopunjeno.setFormularPopunjen(formularPopunjen);
-        poljePopunjeno.setVrednostTekst(! poljePopunjenoDto.getVrednostTekst().isEmpty() ? poljePopunjenoDto.getVrednostTekst() : "");
-        poljePopunjeno.setVrednostBroj(poljePopunjenoDto.getVrednostBroj() != null ? poljePopunjenoDto.getVrednostBroj() : null);
-        return poljePopunjeno;
-    }
+    /**
+     * private PoljePopunjeno mapirajPoljePopunjenoDtoNaPoljePopunjeno(FormularDto.PoljePopunjenoDto poljePopunjenoDto, Polje polje, FormularPopunjen formularPopunjen) {
+     * PoljePopunjeno poljePopunjeno = objectMapper.convertValue(poljePopunjenoDto, PoljePopunjeno.class);
+     * poljePopunjeno.setPolje(polje);
+     * poljePopunjeno.setFormularPopunjen(formularPopunjen);
+     * poljePopunjeno.setVrednostTekst(! poljePopunjenoDto.getVrednostTekst().isEmpty() ? poljePopunjenoDto.getVrednostTekst() : "");
+     * poljePopunjeno.setVrednostBroj(poljePopunjenoDto.getVrednostBroj() != null ? poljePopunjenoDto.getVrednostBroj() : null);
+     * return poljePopunjeno;
+     * }
+     */
 
     @Override
     public Formular updateFormular(Integer id, Formular updatedFormular) {

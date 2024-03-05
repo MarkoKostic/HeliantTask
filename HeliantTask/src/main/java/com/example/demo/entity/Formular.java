@@ -41,7 +41,7 @@ public class Formular {
     @OneToMany(mappedBy = "formular", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Polje> poljeDtoList;
 
-    @OneToOne(mappedBy = "formular", cascade = CascadeType.ALL, orphanRemoval = true)
-    private PoljePopunjeno poljePopunjeno;
+//    @OneToOne(mappedBy = "formular", cascade = CascadeType.ALL, orphanRemoval = true)
+//    private PoljePopunjeno poljePopunjeno;
 
 }

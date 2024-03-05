@@ -27,8 +27,9 @@ public class AdminController {
     private FormularService formularService;
 
     @PostMapping("/createFormular")
-    public void createFormular(@RequestBody @Valid FormularDto formularDto) {
-        formularService.saveFormular(formularDto);
+    public FormularDto createFormular(@RequestBody @Valid FormularDto formularDto) {
+        FormularDto savedFormular = formularService.saveFormular(formularDto);
+        return new ResponseEntity<>(savedFormular, HttpStatus.CREATED).getBody();
     }
 
     // createFormulars

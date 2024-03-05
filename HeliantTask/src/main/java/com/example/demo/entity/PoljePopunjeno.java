@@ -2,8 +2,6 @@ package com.example.demo.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
 import org.hibernate.annotations.CreationTimestamp;
@@ -35,12 +33,10 @@ public class PoljePopunjeno {
     private Polje polje;
 
     @Column(name = "vrednost_tekst")
-    @NotBlank(message = "Vrednost tekst je obavezno polje!")
     @Size(max = 256)
     private String vrednostTekst;
 
     @Column(name = "vrednost_broj")
-    @NotNull
     private double vrednostBroj;
 
     @Column(name = "vreme_kreiranja")

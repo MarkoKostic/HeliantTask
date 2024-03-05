@@ -15,7 +15,7 @@ public interface FormularService {
 
     Optional<Formular> getFormularById(Integer id);
 
-    void saveFormular(FormularDto formularDto);
+    FormularDto saveFormular(FormularDto formularDto);
 
     Formular updateFormular(Integer id, Formular updatedFormular);
 

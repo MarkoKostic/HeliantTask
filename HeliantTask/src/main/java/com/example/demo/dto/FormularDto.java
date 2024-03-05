@@ -29,11 +29,10 @@ public class FormularDto {
     @JsonProperty("poljeDtoList")
     private List<PoljeDto> poljeDtoList = new ArrayList<>();
 
-    @JsonProperty("poljePopunjenoDto")
-    private PoljePopunjenoDto poljePopunjenoDto;
+    //@JsonProperty("poljePopunjenoDto")
+    //private PoljePopunjenoDto poljePopunjenoDto;
 
     @Data
-    @JsonIgnoreProperties(ignoreUnknown = true)
     public static class PoljeDto {
 
         @NotNull
@@ -45,10 +44,7 @@ public class FormularDto {
         @NotNull
         @JsonProperty("tip")
         private PoljeEnum tip;
-    }
 
-    @Data
-    public static class PoljePopunjenoDto {
         @Null(groups = {GroupWithOptionalFields.class})
         @JsonProperty("vrednostBroj")
         private Double vrednostBroj;
@@ -56,4 +52,14 @@ public class FormularDto {
         @JsonProperty("vrednostTekst")
         private String vrednostTekst;
     }
+
+//    @Data
+//    public static class PoljePopunjenoDto {
+//        @Null(groups = {GroupWithOptionalFields.class})
+//        @JsonProperty("vrednostBroj")
+//        private Double vrednostBroj;
+//        @Null(groups = {GroupWithOptionalFields.class})
+//        @JsonProperty("vrednostTekst")
+//        private String vrednostTekst;
+//    }
 }
