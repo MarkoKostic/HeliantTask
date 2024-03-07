@@ -12,6 +12,7 @@ import com.example.demo.repository.PoljePopunjenoRepository;
 import com.example.demo.repository.PoljeRepository;
 import com.example.demo.service.FormularService;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -128,15 +129,42 @@ public class FormularServiceImpl implements FormularService {
      */
 
     @Override
-    public Formular updateFormular(Integer id, Formular updatedFormular) {
-        Optional<Formular> formular = formularRepository.findById(Long.valueOf(id));
-
-        if (formular.isPresent()) {
-            Formular existingFormular = formular.get();
-            existingFormular.setNaziv(updatedFormular.getNaziv());
-            return formularRepository.save(existingFormular);
+    public FormularDto updateFormular(Integer id, FormularDto formularDto) {
+        // Provera postojanja formulara sa datim ID
+        Optional<Formular> existingFormularOptional = formularRepository.findById(Long.valueOf(id));
+        if (existingFormularOptional.isEmpty()) {
+            throw new EntityNotFoundException("Formular not found with id: " + id);
         }
-        return null; // if there is no formular with given ID, return null
+
+        Formular existingFormular = existingFormularOptional.get();
+        // Ažuriranje informacija o formularu
+        existingFormular.setNaziv(formularDto.getNaziv());
+
+        // Ažuriranje informacija o poljima
+        for (FormularDto.PoljeDto poljeDto : formularDto.getPoljeDtoList()) {
+            // Ako postoji PoljePopunjeno sa datim identifikatorom, ažuriraj ga
+            if (poljeDto.getId() != null) {
+                Optional<PoljePopunjeno> existingPoljePopunjenoOptional = poljePopunjenoRepository.findByIdentifier(poljeDto.getId()); // ovde je greska, moram da vidim za identifier, nije dobro ovako
+                if (existingPoljePopunjenoOptional.isEmpty()) {
+                    throw new EntityNotFoundException("PoljePopunjeno not found with identifier: " + poljeDto.getId());
+                }
+
+                PoljePopunjeno existingPoljePopunjeno = existingPoljePopunjenoOptional.get();
+                existingPoljePopunjeno.setVrednostBroj(poljeDto.getVrednostBroj());
+                existingPoljePopunjeno.setVrednostTekst(poljeDto.getVrednostTekst());
+                // Ažuriranje informacija u bazi
+                poljePopunjenoRepository.save(existingPoljePopunjeno);
+            } else {
+                // Ako ne postoji identifikator, onda dodajemo novo PoljePopunjeno
+                PoljePopunjeno newPoljePopunjeno = FormularConverter.convertToPoljePopunjenoEntity(poljeDto);
+                poljePopunjenoRepository.save(newPoljePopunjeno);
+            }
+        }
+
+        // Čuvamo ažurirani formular
+        formularRepository.save(existingFormular);
+
+        return formularDto;
     }
 
     @Override

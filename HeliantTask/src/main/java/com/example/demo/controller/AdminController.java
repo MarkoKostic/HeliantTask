@@ -47,13 +47,9 @@ public class AdminController {
     }
 
     @PutMapping("/formular/{id}")
-    public ResponseEntity<Formular> updateFormular(@PathVariable Integer id, @RequestBody Formular updatedFormular) {
-        Formular result = formularService.updateFormular(id, updatedFormular);
-
-        if (result != null)
-            return new ResponseEntity<>(result, HttpStatus.OK);
-        else
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    public ResponseEntity<FormularDto> updateFormular(@PathVariable Integer id, @RequestBody FormularDto formularDto) {
+        FormularDto updatedFormularDto = formularService.updateFormular(id, formularDto);
+        return ResponseEntity.ok(updatedFormularDto);
     }
 
     @DeleteMapping("/formular/{id}")

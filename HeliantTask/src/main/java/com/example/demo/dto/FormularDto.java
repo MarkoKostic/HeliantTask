@@ -35,6 +35,9 @@ public class FormularDto {
     @Data
     public static class PoljeDto {
 
+        @JsonProperty("id")
+        private Integer id; // dodato polje za identifikaciju, da li bismo znali da li je rec o insert-u ili update-u
+
         @NotNull
         @JsonProperty("naziv")
         private String naziv;

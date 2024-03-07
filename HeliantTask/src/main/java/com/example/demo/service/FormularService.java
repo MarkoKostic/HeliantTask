@@ -17,7 +17,7 @@ public interface FormularService {
 
     FormularDto saveFormular(FormularDto formularDto);
 
-    Formular updateFormular(Integer id, Formular updatedFormular);
+    FormularDto updateFormular(Integer id, FormularDto updatedFormularDto);
 
     void deleteFormular(Integer id);
 }
