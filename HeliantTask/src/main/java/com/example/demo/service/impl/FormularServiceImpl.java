@@ -14,6 +14,8 @@ import com.example.demo.service.FormularService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -43,8 +45,8 @@ public class FormularServiceImpl implements FormularService {
     private ObjectMapper objectMapper;
 
     @Override
-    public List<Formular> getAllFormulari() {
-        return formularRepository.findAll();
+    public Page<Formular> getAllFormulari(Pageable pageable) {
+        return formularRepository.findAll(pageable);
     }
 
     @Override

@@ -7,12 +7,13 @@ import com.example.demo.validation.GroupWithOptionalFields;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 /**
  * @author Marko Kostic, on 2/26/2024
@@ -37,9 +38,9 @@ public class AdminController {
     // (FormularsDto lista formulara)
 
     @GetMapping("/formulari")
-    public ResponseEntity<List<Formular>> getAllFormulari() {
-        List<Formular> formulars = formularService.getAllFormulari();
-        return new ResponseEntity<>(formulars, HttpStatus.OK);
+    public ResponseEntity<Page<Formular>> getAllFormulari(@PageableDefault(size = 10) Pageable pageable) {
+        Page<Formular> formulars = formularService.getAllFormulari(pageable);
+        return ResponseEntity.ok(formulars);
     }
 
     @GetMapping("/formular/{id}")

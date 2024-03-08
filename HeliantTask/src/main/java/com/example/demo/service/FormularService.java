@@ -2,8 +2,9 @@ package com.example.demo.service;
 
 import com.example.demo.dto.FormularDto;
 import com.example.demo.entity.Formular;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
-import java.util.List;
 import java.util.Optional;
 
 /**
@@ -11,7 +12,7 @@ import java.util.Optional;
  */
 public interface FormularService {
 
-    List<Formular> getAllFormulari();
+    Page<Formular> getAllFormulari(Pageable pageable);
 
     Optional<Formular> getFormularById(Integer id);
 
