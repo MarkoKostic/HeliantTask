@@ -5,6 +5,7 @@ import com.example.demo.entity.FormularPopunjen;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 /**
@@ -17,5 +18,7 @@ public interface FormularPopunjenRepository extends JpaRepository<FormularPopunj
 
     List<FormularPopunjen> findByFormular(Formular formular);
 
-    // Integer countByDatumPopunjavanjaBetween(LocalDateTime startDate, LocalDateTime endDate);
+    Integer countByVremeKreiranjaBetween(LocalDateTime juce, LocalDateTime danas);
+
+
 }

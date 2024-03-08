@@ -13,4 +13,6 @@ import java.util.Optional;
 @Repository
 public interface StatistikaRepository extends JpaRepository<Statistika, Long> {
     Optional<Statistika> findByDatum(Date date);
+
+
 }
