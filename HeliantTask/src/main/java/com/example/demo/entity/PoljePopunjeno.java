@@ -47,7 +47,6 @@ public class PoljePopunjeno {
     @UpdateTimestamp
     private Timestamp vremePoslednjeIzmene;
 
-    @Transient
     private Integer identifier;
 
 }

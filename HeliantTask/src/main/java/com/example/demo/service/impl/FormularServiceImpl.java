@@ -169,6 +169,23 @@ public class FormularServiceImpl implements FormularService {
 
     @Override
     public void deleteFormular(Integer id) {
-        formularRepository.deleteById(Long.valueOf(id));
+        Optional<Formular> formularOptional = formularRepository.findById(Long.valueOf(id));
+
+        if (formularOptional.isPresent()) {
+            Formular formular = formularOptional.get();
+
+            // brisanje povezanih entiteta u FormularPopunjen
+            List<FormularPopunjen> formularPopunjenList = formularPopunjenRepository.findByFormular(formular);
+            for (FormularPopunjen formularPopunjen : formularPopunjenList) {
+                poljePopunjenoRepository.deleteByFormularPopunjen(formularPopunjen);
+            }
+            formularPopunjenRepository.deleteAll(formularPopunjenList);
+
+            List<Polje> poljeList = poljeRepository.findByFormular(formular);
+            poljeRepository.deleteAll(poljeList);
+
+            // na kraju brisem sami Formular
+            formularRepository.deleteById(Long.valueOf(id));
+        }
     }
 }

@@ -53,8 +53,9 @@ public class AdminController {
     }
 
     @DeleteMapping("/formular/{id}")
-    public void deleteFormular(@PathVariable Integer id) {
+    public ResponseEntity<String> deleteFormular(@PathVariable Integer id) {
         formularService.deleteFormular(id);
+        return ResponseEntity.ok("Formular successfully deleted");
     }
 
 }
