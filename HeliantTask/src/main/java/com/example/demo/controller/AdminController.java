@@ -37,8 +37,9 @@ public class AdminController {
     // (FormularsDto lista formulara)
 
     @GetMapping("/formulari")
-    public List<Formular> getAllFormulari() {
-        return formularService.getAllFormulari();
+    public ResponseEntity<List<Formular>> getAllFormulari() {
+        List<Formular> formulars = formularService.getAllFormulari();
+        return new ResponseEntity<>(formulars, HttpStatus.OK);
     }
 
     @GetMapping("/formular/{id}")
