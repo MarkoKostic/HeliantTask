@@ -1,8 +1,4 @@
-Zadatak se sastoji iz osnovnih minimalnih zahteva i iz bonus dela.
-Prilikom razvoja aplikacije potrebno je svaku funkcionalnost pojedinačno komitovati na git repozitorijum sa opisnom
-porukom.
-Kada završite zadatak, možete poslati link od git repozitorijuma sa zadatkom na sledeće mejl adrese:
-nemanja.gruzanic@heliant.rs i filip.maljkovic@heliant.rs.
+
 Zahtevi:
 1. Inicijalizovati java aplikaciju koristeći Spring Boot.
 2. Korititi MySQL za definsianje modela podataka za entitete Korisnik, Statistika,
